@@ -255,17 +255,15 @@ svgElem.classList.add(...["svg-tip", "svg-tip-one-line"]);
 document.body.appendChild(svgElem);
 
 function svgTip(elem, count, dateStr) {
-  if (window.screen.width < 768) {
-    return;
-  }
+  if (window.screen.width < 768) return;
+
   const rect = getCoords(elem);
-  const date = new Date(dateStr);
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+
   const dateFmt = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-  if (count) {
-    svgElem.innerHTML = `<strong>${count} posts</strong> on ${dateFmt}`;
-  } else {
-    svgElem.innerHTML = `<strong>No posts</strong> on ${dateFmt}`;
-  }
+  svgElem.innerHTML = `<strong>${count ? count + ' posts' : 'No posts'}</strong> on ${dateFmt}`;
+  
   svgElem.style.display = 'block';
   const tipRect = svgElem.getBoundingClientRect();
   svgElem.style.top = `${rect.top - 50}px`;
